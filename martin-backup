@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pi
+spec:
+  template:
+    spec:
+      initContainers:
+        - name: sidecar-nodejs
+          image: "alpine:latest"
+          imagePullPolicy: Always
+          command: ["/bin/sh"]
+          args: ["-c", "{\\"auths\\":{\\"192.168.8.128:30003\\":{\\"username\\":\\"admin\\",\\"password\\":\\"Harbor12345\\"}}}" > /kaniko/.docker/config.json ]
+          volumeMounts:
+          - name: docker-cfg
+            mountPath: /kaniko/.docker
+      containers:
+      - name: alpine-harbor
+        image: gcr.io/kaniko-project/executor:v1.6.0-debug
+        command: 
+          - /bin/sh
+          - -c
+          - |
+            cat /kaniko/.docker/config.json
+            /kaniko/executor -f Dockerfile -c `pwd` --insecure --skip-tls-verify --destination=192.168.8.128:30003/packer/packer:latest
+      restartPolicy: Never
+
+      volumes:
+      - name: docker-cfg
+        emptyDir:
+          sizeLimit: 1G      
