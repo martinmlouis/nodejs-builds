@@ -23,8 +23,11 @@ spec:
           - |
             cat /kaniko/.docker/config.json
             /kaniko/executor -f Dockerfile -c `pwd` --insecure --skip-tls-verify --destination=192.168.8.128:30003/packer/packer:latest
+          volumeMounts:
+          - name: docker-cfg
+            mountPath: /kaniko/.docker
       restartPolicy: Never
-
+            
       volumes:
       - name: docker-cfg
         emptyDir:
