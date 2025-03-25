@@ -10,7 +10,7 @@ spec:
           image: "alpine:latest"
           imagePullPolicy: Always
           command: ["/bin/sh"]
-          args: ["-c", "{\\"auths\\":{\\"192.168.8.128:30003\\":{\\"username\\":\\"admin\\",\\"password\\":\\"Harbor12345\\"}}}" > /kaniko/.docker/config.json" ]
+          args: ["-c", "{\\"auths\\":{\\"192.168.8.128:30003\\":{\\"username\\":\\"admin\\",\\"password\\":\\"Harbor12345\\"}}}" > /kaniko/.docker/config.json ]
           volumeMounts:
           - name: docker-cfg
             mountPath: /kaniko/.docker
