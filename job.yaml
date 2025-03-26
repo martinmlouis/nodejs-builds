@@ -1,34 +1,35 @@
+apiVersion: v1
+data:
+  .dockerconfigjson: ewoJImF1dGhzIjogewoJCSJnb2hhcmJvci4xMC4wLjAuMTI3Lm5pcC5pbzozMDAwMyI6IHsKCQkJImF1dGgiOiAiWVdSdGFXNDZTR0Z5WW05eU1USXpORFU9IgoJCX0sCgkJImhhcmJvci4xMC4wLjAuMTI3Lm5pcC5pbzozMDAwMyI6IHsKCQkJImF1dGgiOiAiWVdSdGFXNDZTR0Z5WW05eU1USXpORFU9IgoJCX0sCgkJImh0dHBzOi8vaW5kZXguZG9ja2VyLmlvL3YxLyI6IHsKCQkJImF1dGgiOiAiYldGeWRHbHViRzkxY21SMWMzZGhiWGs2UzJGdVpHbHJkWEJ3WVcxQU1USXoiCgkJfQoJfQp9
+kind: Secret
+metadata:
+  creationTimestamp: null
+  name: harbor
+type: kubernetes.io/dockerconfigjson
+
 apiVersion: batch/v1
 kind: Job
 metadata:
   name: pi
-  namespace: nodejs-builds
 spec:
   template:
     spec:
+      imagePullSecrets: 
+      - name: "harbor"
       containers:
       - name: sidecar-nodejs
-        image: "alpine:latest"
+        image: "harbor.10.0.0.127.nip.io:30003/builds/nodejs:1.0"
         imagePullPolicy: Always
-        command:
-        - /bin/sh
-        - -c
-        - echo "{\\"auths\\":{\\"10.0.0.127:30003\\":{\\"username\\":\\"admin\\",\\"password\\":\\"Harbor12345\\"}}}" > /kaniko/.docker/config.json
-        - cat /kaniko/.docker/config.json
+        command: ["cat"]
         volumeMounts:
         - name: docker-cfg
-          mountPath: /kaniko/.docker
-      - name: alpine-harbor
+          mountPath: /tmp
+      - name: nodejs
         image: gcr.io/kaniko-project/executor:v1.6.0-debug
-        command:
-          - sh
-          - -c        
-          - echo "{\\"auths\\":{\\"10.0.0.127:30003\\":{\\"username\\":\\"admin\\",\\"password\\":\\"Harbor12345\\"}}}" > /kaniko/.docker/config.json
-          - cat /kaniko/.docker/config.json          
-          - /kaniko/executor -f Dockerfile -c `pwd` --insecure --skip-tls-verify --destination=10.0.0.127:30003/packer/packer:latest
+        command: ["/tmp/build-docker.sh"]
         volumeMounts:
         - name: docker-cfg
-          mountPath: /kaniko/.docker
+          mountPath: /tmp
       restartPolicy: Never
 
       volumes:
