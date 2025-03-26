@@ -21,10 +21,12 @@ spec:
       - name: sidecar-nodejs
         image: "harbor.10.0.0.127.nip.io:30003/builds/nodejs:1.0"
         imagePullPolicy: Always
-        command: ["cat"]
+        command: 
+        - cp /tmp/build-docker.sh /data/build-docker.sh
+        - cp /tmp/nodejs-Dockerfile /data/nodejs-Dockerfile
         volumeMounts:
         - name: docker-cfg
-          mountPath: /tmp
+          mountPath: /data
       - name: nodejs
         image: gcr.io/kaniko-project/executor:v1.6.0-debug
         command: ["/tmp/build-docker.sh"]
