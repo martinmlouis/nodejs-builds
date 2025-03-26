@@ -13,7 +13,7 @@ spec:
           command:
           - /bin/sh
           - -c
-          - echo "{\\"auths\\":{\\"192.168.8.128:30003\\":{\\"username\\":\\"admin\\",\\"password\\":\\"Harbor12345\\"}}}" > /kaniko/.docker/config.json
+          - echo "{\\"auths\\":{\\"10.0.0.127:30003\\":{\\"username\\":\\"admin\\",\\"password\\":\\"Harbor12345\\"}}}" > /kaniko/.docker/config.json
           volumeMounts:
           - name: docker-cfg
             mountPath: /kaniko/.docker
@@ -21,10 +21,8 @@ spec:
       - name: alpine-harbor
         image: gcr.io/kaniko-project/executor:v1.6.0-debug
         command:
-          - /bin/sh
-          - -c
           - cat /kaniko/.docker/config.json
-          - /kaniko/executor -f Dockerfile -c `pwd` --insecure --skip-tls-verify --destination=192.168.8.128:30003/packer/packer:latest
+          - /kaniko/executor -f Dockerfile -c `pwd` --insecure --skip-tls-verify --destination=10.0.0.127:30003/packer/packer:latest
         volumeMounts:
         - name: docker-cfg
           mountPath: /kaniko/.docker
