@@ -6,30 +6,11 @@ metadata:
 spec:
   template:
     spec:
-      initContainers:
-        - name: sidecar-nodejs
-          image: "alpine:latest"
-          imagePullPolicy: Always
-          command:
-          - /bin/sh
-          - -c
-          - echo "{\\"auths\\":{\\"10.0.0.127:30003\\":{\\"username\\":\\"admin\\",\\"password\\":\\"Harbor12345\\"}}}" > /kaniko/.docker/config.json
-          - sleep 30
-          volumeMounts:
-          - name: docker-cfg
-            mountPath: /kaniko/.docker
       containers:
       - name: alpine-harbor
         image: gcr.io/kaniko-project/executor:v1.6.0-debug
         command:
+          - echo "{\\"auths\\":{\\"10.0.0.127:30003\\":{\\"username\\":\\"admin\\",\\"password\\":\\"Harbor12345\\"}}}" > /kaniko/.docker/config.json
           - cat /kaniko/.docker/config.json
           - /kaniko/executor -f Dockerfile -c `pwd` --insecure --skip-tls-verify --destination=10.0.0.127:30003/packer/packer:latest
-        volumeMounts:
-        - name: docker-cfg
-          mountPath: /kaniko/.docker
       restartPolicy: Never
-
-      volumes:
-      - name: docker-cfg
-        emptyDir:
-          sizeLimit: 1G
