@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 data:
   .dockerconfigjson: ewoJImF1dGhzIjogewoJCSJnb2hhcmJvci4xMC4wLjAuMTI3Lm5pcC5pbzozMDAwMyI6IHsKCQkJImF1dGgiOiAiWVdSdGFXNDZTR0Z5WW05eU1USXpORFU9IgoJCX0sCgkJImhhcmJvci4xMC4wLjAuMTI3Lm5pcC5pbzozMDAwMyI6IHsKCQkJImF1dGgiOiAiWVdSdGFXNDZTR0Z5WW05eU1USXpORFU9IgoJCX0sCgkJImh0dHBzOi8vaW5kZXguZG9ja2VyLmlvL3YxLyI6IHsKCQkJImF1dGgiOiAiYldGeWRHbHViRzkxY21SMWMzZGhiWGs2UzJGdVpHbHJkWEJ3WVcxQU1USXoiCgkJfQoJfQp9
@@ -6,7 +7,7 @@ metadata:
   creationTimestamp: null
   name: harbor
 type: kubernetes.io/dockerconfigjson
-
+---
 apiVersion: batch/v1
 kind: Job
 metadata:
