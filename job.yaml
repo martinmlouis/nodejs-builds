@@ -14,6 +14,7 @@ spec:
           - /bin/sh
           - -c
           - echo "{\\"auths\\":{\\"10.0.0.127:30003\\":{\\"username\\":\\"admin\\",\\"password\\":\\"Harbor12345\\"}}}" > /kaniko/.docker/config.json
+          - sleep 30
           volumeMounts:
           - name: docker-cfg
             mountPath: /kaniko/.docker
