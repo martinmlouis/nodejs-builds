@@ -11,9 +11,11 @@ type: kubernetes.io/dockerconfigjson
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: pi
+  name: build-environment-specific-nodejs
 spec:
   template:
+  backoffLimit: 4
+  ttlSecondsAfterFinished: 1200
     spec:
       imagePullSecrets: 
       - name: "harbor"
@@ -22,20 +24,22 @@ spec:
         image: "harbor.10.0.0.127.nip.io:30003/builds/nodejs:1.0"
         imagePullPolicy: Always
         command: 
-        - cp /tmp/build-docker.sh /data/build-docker.sh
-        - cp /tmp/nodejs-Dockerfile /data/nodejs-Dockerfile
+        - /bin/bash
+        - -c
+        - cp /home/* /data
         volumeMounts:
-        - name: docker-cfg
+        - name: builddata
           mountPath: /data
       - name: nodejs
         image: gcr.io/kaniko-project/executor:v1.6.0-debug
-        command: ["/tmp/build-docker.sh"]
+        command: ["/home/build-docker.sh"]
         volumeMounts:
-        - name: docker-cfg
-          mountPath: /tmp
+        - name: builddata
+          mountPath: /home
       restartPolicy: Never
 
       volumes:
-      - name: docker-cfg
+      - name: builddata
         emptyDir:
           sizeLimit: 1G
+
