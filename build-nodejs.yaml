@@ -11,7 +11,7 @@ type: kubernetes.io/dockerconfigjson
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: pi
+  name: nodejs-builds
 spec:
   template:
     spec:
