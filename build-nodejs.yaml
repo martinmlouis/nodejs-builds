@@ -11,17 +11,17 @@ type: kubernetes.io/dockerconfigjson
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: build-environment-specific-nodejs
+  name: pi
 spec:
   template:
-  backoffLimit: 4
-  ttlSecondsAfterFinished: 1200
     spec:
+      backoffLimit: 4
+      ttlSecondsAfterFinished: 1200
       imagePullSecrets: 
       - name: "harbor"
       containers:
       - name: sidecar-nodejs
-        image: "harbor.10.0.0.127.nip.io:30003/builds/nodejs:1.0"
+        image: "harbor.10.0.0.127.nip.io:30003/builds/sidecar-nodejs:1.0"
         imagePullPolicy: Always
         command: 
         - /bin/bash
@@ -42,4 +42,4 @@ spec:
       - name: builddata
         emptyDir:
           sizeLimit: 1G
-
+  
