@@ -34,6 +34,10 @@ spec:
       - name: nodejs
         image: gcr.io/kaniko-project/executor:v1.6.0-debug
         env:
+        - name: ENVIRONMENT
+          value: "dev"
+        - name: DOCKER_REGISTRY
+          value: "10.0.0.127:30003"
         - name: HARBOR_USERNAME
           valueFrom:
             secretKeyRef:
